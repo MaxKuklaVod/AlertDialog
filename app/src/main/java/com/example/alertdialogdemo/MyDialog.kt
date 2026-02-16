@@ -2,26 +2,65 @@ package com.example.alertdialogdemo
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
-import java.util.*
 
-class MyDialog(val ctx: Context): DialogFragment() {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        var choice = 0
-        Log.d("mytag", "creating dialog")
-        Log.d("mytag", Arrays.toString( ctx.resources.getStringArray(R.array.weather_types)))
-        val langs = arrayOf("Java", "Kotin", "C++", "Python")
-        return ctx.let { AlertDialog.Builder(it).
-            setMessage("Test message").
-            setSingleChoiceItems(ctx.resources.getStringArray(R.array.weather_types),
-                1, {dialog, which -> choice = which}).
-            setPositiveButton("Ok", MyListener()).
-            create()
+class MyDialog : DialogFragment() {
+
+    enum class DialogType {
+        SETTINGS, DESIGN, CITY
+    }
+
+    interface DialogListener {
+        fun onDesignSelected(index: Int)
+        fun onCitySelected(city: String)
+    }
+
+    private var listener: DialogListener? = null
+    private var type: DialogType = DialogType.SETTINGS
+
+    fun setListener(listener: DialogListener) {
+        this.listener = listener
+    }
+
+    companion object {
+        fun newInstance(type: DialogType): MyDialog {
+            val frag = MyDialog()
+            frag.type = type
+            return frag
         }
-        //return super.onCreateDialog(savedInstanceState)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val builder = AlertDialog.Builder(requireContext())
+        
+        when (type) {
+            DialogType.SETTINGS -> {
+                builder.setTitle(R.string.select_option)
+                    .setItems(R.array.settings_options) { _: DialogInterface, which: Int ->
+                        val nextType = if (which == 0) DialogType.DESIGN else DialogType.CITY
+                        val nextDialog = newInstance(nextType)
+                        nextDialog.setListener(listener!!)
+                        nextDialog.show(parentFragmentManager, "sub_dialog")
+                    }
+            }
+            DialogType.DESIGN -> {
+                builder.setTitle(R.string.select_weather_view)
+                    .setItems(R.array.weather_views) { _: DialogInterface, which: Int ->
+                        listener?.onDesignSelected(which)
+                    }
+            }
+            DialogType.CITY -> {
+                val cities = resources.getStringArray(R.array.cities)
+                builder.setTitle(R.string.select_city)
+                    .setItems(cities) { _: DialogInterface, which: Int ->
+                        listener?.onCitySelected(cities[which])
+                    }
+            }
+        }
+        
+        builder.setNegativeButton(R.string.cancel, null)
+        return builder.create()
     }
 }

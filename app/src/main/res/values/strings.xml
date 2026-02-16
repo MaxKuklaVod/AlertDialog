@@ -1,7 +1,32 @@
 <resources>
-    <string name="app_name">AlertDialogDemo</string>
-    <string-array name="weather_types">
-        <item>Text</item>
-        <item>Icon</item>
+    <string name="app_name">Погода</string>
+    <string name="btn_settings">Настройки</string>
+    <string name="select_option">Выберите опцию</string>
+    <string name="select_weather_view">Выберите вид отображения</string>
+    <string name="select_city">Выберите город</string>
+
+    <string-array name="settings_options">
+        <item>Изменить вид (Дизайн)</item>
+        <item>Изменить город</item>
     </string-array>
+
+    <string-array name="weather_views">
+        <item>Краткий (Иконки)</item>
+        <item>Детальный (Текст)</item>
+    </string-array>
+
+    <string-array name="cities">
+        <item>Москва</item>
+        <item>Лондон</item>
+        <item>Нью-Йорк</item>
+        <item>Токио</item>
+    </string-array>
+
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+
+    <string name="temp_value">25°C</string>
+    <string name="condition">Солнечно</string>
+    <string name="humidity">Влажность: 45%</string>
+    <string name="wind">Ветер: 5 м/с</string>
 </resources>
