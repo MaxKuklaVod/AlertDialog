@@ -29,4 +29,8 @@
     <string name="condition">Солнечно</string>
     <string name="humidity">Влажность: 45%</string>
     <string name="wind">Ветер: 5 м/с</string>
+
+    <string name="menu_language">Язык</string>
+    <string name="lang_ru">Русский</string>
+    <string name="lang_en">Английский</string>
 </resources>

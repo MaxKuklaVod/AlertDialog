@@ -1,9 +1,13 @@
 package com.example.alertdialogdemo
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), MyDialog.DialogListener {
 
@@ -30,6 +34,38 @@ class MainActivity : AppCompatActivity(), MyDialog.DialogListener {
                 dialog.show(supportFragmentManager, "settings")
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.lang_ru -> {
+                setLocale("ru")
+                true
+            }
+            R.id.lang_en -> {
+                setLocale("en")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setLocale(langCode: String) {
+        val locale = Locale(langCode)
+        Locale.setDefault(locale)
+        val config = Configuration(resources.configuration)
+        config.setLocale(locale)
+        
+        // Using the approach suggested in the task
+        resources.updateConfiguration(config, resources.displayMetrics)
+        
+        // Recreate the activity to apply changes
+        recreate()
     }
 
     override fun onDesignSelected(index: Int) {
