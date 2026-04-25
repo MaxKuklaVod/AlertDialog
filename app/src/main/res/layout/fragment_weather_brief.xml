@@ -15,12 +15,14 @@
         android:textStyle="bold" />
 
     <ImageView
+        android:id="@+id/iv_weather_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/ic_launcher_foreground"
         android:contentDescription="Condition" />
 
     <TextView
+        android:id="@+id/tv_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/temp_value"

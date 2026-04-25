@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), MyDialog.DialogListener {
@@ -34,6 +38,35 @@ class MainActivity : AppCompatActivity(), MyDialog.DialogListener {
                 dialog.show(supportFragmentManager, "settings")
             }
         }
+
+        findViewById<Button>(R.id.btn_sync_weather).setOnClickListener {
+            startWeatherChain()
+        }
+    }
+
+    private fun startWeatherChain() {
+        val cities = resources.getStringArray(R.array.cities)
+        if (cities.isEmpty()) return
+
+        val workManager = WorkManager.getInstance(applicationContext)
+        
+        // Create the first work request
+        var continuation = workManager.beginWith(
+            OneTimeWorkRequestBuilder<WeatherWorker>()
+                .setInputData(workDataOf("city" to cities[0]))
+                .build()
+        )
+
+        // Chain the rest of the cities
+        for (i in 1 until cities.size) {
+            val workRequest = OneTimeWorkRequestBuilder<WeatherWorker>()
+                .setInputData(workDataOf("city" to cities[i]))
+                .build()
+            continuation = continuation.then(workRequest)
+        }
+
+        continuation.enqueue()
+        Toast.makeText(this, "Syncing weather for ${cities.size} cities...", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -61,10 +94,8 @@ class MainActivity : AppCompatActivity(), MyDialog.DialogListener {
         val config = Configuration(resources.configuration)
         config.setLocale(locale)
         
-        // Using the approach suggested in the task
         resources.updateConfiguration(config, resources.displayMetrics)
         
-        // Recreate the activity to apply changes
         recreate()
     }
 

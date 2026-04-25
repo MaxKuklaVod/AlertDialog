@@ -21,12 +21,14 @@
         android:layout_marginBottom="16dp" />
 
     <TextView
+        android:id="@+id/tv_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/temp_value"
         android:textSize="48sp" />
 
     <TextView
+        android:id="@+id/tv_condition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/condition"
@@ -34,12 +36,14 @@
         android:layout_marginBottom="16dp" />
 
     <TextView
+        android:id="@+id/tv_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/humidity"
         android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/tv_wind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/wind"
